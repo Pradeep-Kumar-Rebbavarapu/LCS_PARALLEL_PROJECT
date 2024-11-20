@@ -22,42 +22,54 @@ df = pd.read_csv(data_path)
 df.replace([np.inf, -np.inf], np.nan, inplace=True)
 df.dropna(inplace=True)
 
-# Create Figure
-fig, axes = plt.subplots(1, 2, figsize=(22, 10))
+# Define the x-tick values for the bar plot
+x_ticks = [5, 10, 100, 200, 500, 1000, 10000]
+
+# --- Bar Graph (Sequential vs Anti-Diagonal) ---
+fig, ax = plt.subplots(figsize=(10, 6))
 
 # Bar Plot: Sequential vs Anti-Diagonal
 x = np.arange(len(df['Input Size']))
 width = 0.35
-axes[0].bar(x - width / 2, df['Sequential Time (s)'], width, label='Sequential', color=colors['Sequential'])
-axes[0].bar(x + width / 2, df['Anti-Diagonal Time (s)'], width, label='Anti-Diagonal', color=colors['Anti-Diagonal'])
+ax.bar(x - width / 2, df['Sequential Time (s)'], width, label='Sequential', color=colors['Sequential'])
+ax.bar(x + width / 2, df['Anti-Diagonal Time (s)'], width, label='Anti-Diagonal', color=colors['Anti-Diagonal'])
 
-# Bar Plot Settings
-axes[0].set_xticks(x)
-# axes[0].set_xticklabels([f"$10^{int(np.log10(i))}$" if i != 0 else "0" for i in df['Input Size']], rotation=45, fontsize=12)  # Format Input Size as powers of 10
-axes[0].set_xlabel('Input Size', fontsize=14)
-axes[0].set_ylabel('Time (s)', fontsize=14)
-axes[0].set_title('Time Taken: Sequential vs Anti-Diagonal (Bar Graph)', fontsize=16)
-axes[0].legend(fontsize=12)
-axes[0].grid(axis='y', linestyle='--', alpha=0.7)
+# Bar Plot Settings for x-ticks
+ax.set_xticks(np.arange(len(x_ticks)))  # Ensure the number of ticks corresponds to the given list
+ax.set_xticklabels(x_ticks, rotation=45, fontsize=12)  # Set custom tick labels
+ax.set_xlabel('Input Size', fontsize=14)
+ax.set_ylabel('Time (s)', fontsize=14)
+ax.set_title('Time Taken: Sequential vs Anti-Diagonal (Bar Graph)', fontsize=16)
+ax.legend(fontsize=12)
+ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 # Annotate Bars
-for i in range(len(df['Input Size'])):
-    axes[0].text(i - width / 2, df['Sequential Time (s)'][i] + 0.1, f"{df['Sequential Time (s)'][i]:.2f}", ha='center', fontsize=10)
-    axes[0].text(i + width / 2, df['Anti-Diagonal Time (s)'][i] + 0.1, f"{df['Anti-Diagonal Time (s)'][i]:.2f}", ha='center', fontsize=10)
+for i in range(len(x_ticks)):
+    ax.text(i - width / 2, df['Sequential Time (s)'][i] + 0.1, f"{df['Sequential Time (s)'][i]:.2f}", ha='center', fontsize=10)
+    ax.text(i + width / 2, df['Anti-Diagonal Time (s)'][i] + 0.1, f"{df['Anti-Diagonal Time (s)'][i]:.2f}", ha='center', fontsize=10)
 
+# Save Bar Graph
+bar_output_image_path = os.path.join(BASE_DIR, '../../images/sequential_vs_anti_diagonal_bar.png')
+plt.tight_layout()
+plt.savefig(bar_output_image_path)
+plt.close()
 
-# Plot Speedup in Blue with Blue Dots
-axes[1].plot(df['Input Size'], df['Speedup'], label='Anti-Diagonal', color=colors['Anti-Diagonal'], marker='s', markersize=8, linewidth=2)
+# --- Line Graph (Speedup) ---
+fig, ax = plt.subplots(figsize=(10, 6))
+
+# Line Plot: Speedup for Anti-Diagonal
+ax.plot(df['Input Size'], df['Speedup'], label='Anti-Diagonal', color=colors['Anti-Diagonal'], marker='s', markersize=8, linewidth=2)
 
 # Line Plot Settings
-axes[1].set_xlabel('Input Size', fontsize=14)
-axes[1].set_ylabel('Speedup', fontsize=14)
-axes[1].set_title('Anti-Diagonal (Line Plot)', fontsize=16)
-axes[1].legend(fontsize=12)
-axes[1].grid(linestyle='--', alpha=0.7)
+ax.set_xlabel('Input Size', fontsize=14)
+ax.set_ylabel('Speedup', fontsize=14)
+ax.set_title('Speedup for Anti-Diagonal (Line Plot)', fontsize=16)
+ax.legend(fontsize=12)
+ax.grid(linestyle='--', alpha=0.7)
 
-# Adjust Layout and Save
-output_image_path = os.path.join(BASE_DIR, '../../images/sequential_vs_anti_diagonal_combined.png')
+# Save Speedup Graph
+speedup_output_image_path = os.path.join(BASE_DIR, '../../images/sequential_vs_anti_diagonal_speedup.png')
 plt.tight_layout()
-plt.savefig(output_image_path)
+plt.savefig(speedup_output_image_path)
 plt.close()
+
