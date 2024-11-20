@@ -9,8 +9,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Colors for plotting
 colors = {
-    'Sequential': '#1f77b4',
-    'Anti-Diagonal': '#ff7f0e',
+    'Sequential': 'red',
+    'Anti-Diagonal': 'blue',
     'Divide-and-Conquer': '#2ca02c'
 }
 
