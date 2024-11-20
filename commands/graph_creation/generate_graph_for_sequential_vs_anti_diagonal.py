@@ -33,7 +33,7 @@ axes[0].bar(x + width / 2, df['Anti-Diagonal Time (s)'], width, label='Anti-Diag
 
 # Bar Plot Settings
 axes[0].set_xticks(x)
-axes[0].set_xticklabels([f"$10^{int(np.log10(i))}$" if i != 0 else "0" for i in df['Input Size']], rotation=45, fontsize=12)  # Format Input Size as powers of 10
+# axes[0].set_xticklabels([f"$10^{int(np.log10(i))}$" if i != 0 else "0" for i in df['Input Size']], rotation=45, fontsize=12)  # Format Input Size as powers of 10
 axes[0].set_xlabel('Input Size', fontsize=14)
 axes[0].set_ylabel('Time (s)', fontsize=14)
 axes[0].set_title('Time Taken: Sequential vs Anti-Diagonal (Bar Graph)', fontsize=16)
@@ -47,21 +47,12 @@ for i in range(len(df['Input Size'])):
 
 
 # Plot Speedup in Blue with Blue Dots
-axes[1].plot(df['Input Size'], df['Anti-Diagonal Speedup'], label='Anti-Diagonal Speedup', color='blue', marker='o', markersize=8, linestyle='-', linewidth=2)
-axes[1].plot(df['Input Size'], df['Divide-and-Conquer Speedup'], label='Divide-and-Conquer Speedup', color='blue', marker='o', markersize=8, linestyle='-', linewidth=2)
+axes[1].plot(df['Input Size'], df['Speedup'], label='Anti-Diagonal', color=colors['Anti-Diagonal'], marker='s', markersize=8, linewidth=2)
 
-# Format x-axis labels as powers of 10 for the speedup plot
-axes[1].set_xticks(df['Input Size'])
-axes[1].set_xticklabels([f"$10^{int(np.log10(i))}$" for i in df['Input Size']])
-
-# Set y-axis to be in scientific notation for speedup plot
-axes[1].yaxis.set_major_formatter(ScalarFormatter('e'))
-axes[1].ticklabel_format(axis='y', style='sci', scilimits=(-4, -3))
-
-# Speedup Plot Settings
+# Line Plot Settings
 axes[1].set_xlabel('Input Size', fontsize=14)
 axes[1].set_ylabel('Speedup', fontsize=14)
-axes[1].set_title('Speedup Plot (Blue with Dots)', fontsize=16)
+axes[1].set_title('Anti-Diagonal (Line Plot)', fontsize=16)
 axes[1].legend(fontsize=12)
 axes[1].grid(linestyle='--', alpha=0.7)
 
